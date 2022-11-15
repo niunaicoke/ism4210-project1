@@ -1,0 +1,155 @@
+create DATABASE EBE_Liupeiran;
+
+-- SHOW TABLES from EBE_Liupeiran;
+-- show tables;
+-- select * from information_schema.table_constraints where (constraint_schema ='EBE_Liupeiran') order by table_name;
+
+use EBE_Liupeiran;
+
+
+CREATE TABLE Venue (
+    VenueID int(10) PRIMARY KEY,
+    VenueName varchar(255),
+    capacity int,
+    Street varchar(255),
+    City varchar(255),
+    State char(2),
+    Zip char(5),
+    Parking boolean,
+    LocationContactName varchar(255),
+    LocationContactPhone int(10)
+);
+
+CREATE TABLE Client (
+    ClientID int(10) PRIMARY KEY,
+    ClientName varchar(255) not null,
+    Street varchar(255),
+    City varchar(255),
+    State char(2),
+    Zip char(5)
+    
+);
+
+CREATE TABLE Event (
+    EventCode int(10),
+    PRIMARY KEY (EventCode),
+    EventName varchar(255),
+    Description varchar(255),
+    Date1 date,
+    StartTime time,
+    EndTime time,
+    Ticket boolean,
+    VenueID int(10),
+    ClientID int(10),
+    foreign key (VenueID) references Venue(VenueID),
+    foreign key (ClientID) references Client(ClientID)
+);
+
+CREATE TABLE Contact (
+    ClientID int(10),
+    ContactName varchar(255) not null,
+    ContactPhone int(10),
+    ContactEmail varchar(255),
+    PRIMARY KEY (ClientID, ContactName),
+    foreign key (ClientID) references Client(ClientID)
+);
+
+CREATE TABLE Event_Contact (
+    ClientID int(10),
+    ContactName varchar(255) not null,
+    EventCode int(10),
+    PRIMARY KEY (ClientID, ContactName, EventCode),
+    foreign key (ClientID, ContactName) references Contact(ClientID, ContactName),
+    foreign key (EventCode) references Event(EventCode)
+);
+
+CREATE TABLE Ticketed_Event (
+    EventCode int(10) PRIMARY KEY,
+    TicketPrice float,
+    Ticketaavilable int,
+    TicketsSold int,
+    WristBands boolean,
+    HandStamp boolean,
+    foreign key (EventCode) references Event(EventCode)
+);
+
+CREATE TABLE NON_Ticketed_Event (
+    EventCode int(10) PRIMARY KEY,
+    ActualAttendence int,
+    foreign key (EventCode) references Event(EventCode)
+);
+
+alter table NON_Ticketed_Event add GuestList boolean after EventCode;
+alter table NON_Ticketed_Event add ExpectedAttendence int after GuestList;
+
+
+
+insert into Venue
+values (
+1234567891,
+'Venucjnadkcnak',
+100,
+'2800 sw crayon street',
+'gainesvilee',
+'FL',
+'32608',
+True,
+'rrroom',
+1234567891
+);
+
+insert into Client
+values (
+1234567891,
+'nickaaa',
+'3000 sw crayon street',
+'gainesville',
+'FL',
+'32608'
+);
+
+insert into Event
+values (
+1234567891,
+'LOLEvent',
+'this is a decription for lol event',
+'2022-5-10',
+'10:00:00',
+'23:00:00',
+True,
+1234567891,
+1234567891
+);
+
+insert into Contact
+values (
+1234567891,
+'nickaaa',
+1234567891,
+'nickaaa@gmail.com'
+);
+
+insert into Event_Contact
+values (
+1234567891,
+'nickaaa',
+1234567891
+);
+
+insert into Ticketed_Event
+values (
+1234567891,
+150,
+200,
+120,
+True,
+False
+);
+
+insert into NON_Ticketed_Event
+values (
+1234567891,
+True,
+10,
+100
+);
